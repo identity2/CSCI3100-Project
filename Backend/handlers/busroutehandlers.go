@@ -1,68 +1,37 @@
 package handlers
 
 import (
-	"database/sql"
-	"fmt"
-	"log"
 	"net/http"
-	"strconv"
 
 	"github.com/RitoGamingPLZ/CSCI3100/models"
 )
 
-// RouteHandler handles all route APIs.
-type RouteHandler struct {
-	DB       *sql.DB
-	InfoLog  *log.Logger
-	ErrorLog *log.Logger
-}
-
 // GetAllRoute responses with all the bus routes.
 // routed from: Get /route
-func (rh *RouteHandler) GetAllRoute(w http.ResponseWriter, r *http.Request) {
-	body, err := models.GetAllRoute(rh.DB)
-	if err != nil {
-		rh.ErrorLog.Println(err)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	fmt.Fprintf(w, body)
+func (h *Handler) GetAllRoute(w http.ResponseWriter, r *http.Request) {
+	h.handleGetAll(w, r, models.GetAllRoute)
 }
 
 // GetRoute responses with the bus route with {id}.
 // routed from: Get /route/{id}
-func (rh *RouteHandler) GetRoute(w http.ResponseWriter, r *http.Request) {
-	id, err := strconv.Atoi(r.URL.Query().Get(":id"))
-	if err != nil {
-		http.NotFound(w, r)
-		return
-	}
-
-	body, err := models.GetRoute(rh.DB, id)
-	if err != nil {
-		rh.ErrorLog.Println(err)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	fmt.Fprintf(w, body)
+func (h *Handler) GetRoute(w http.ResponseWriter, r *http.Request) {
+	h.handleGet(w, r, models.GetRoute)
 }
 
 // CreateRoute creates a new route.
 // routed from: POST /route
-func (rh *RouteHandler) CreateRoute(w http.ResponseWriter, r *http.Request) {
-
+func (h *Handler) CreateRoute(w http.ResponseWriter, r *http.Request) {
+	h.handlePost(w, r, models.PostRoute)
 }
 
 // UpdateRoute updates the route with {id}.
 // routed from: PUT /route/{id}
-func (rh *RouteHandler) UpdateRoute(w http.ResponseWriter, r *http.Request) {
-
+func (h *Handler) UpdateRoute(w http.ResponseWriter, r *http.Request) {
+	h.handlePut(w, r, models.PutRoute)
 }
 
 // DeleteRoute deletes the route with {id}.
 // routed from: DELETE /route/{id}
-func (rh *RouteHandler) DeleteRoute(w http.ResponseWriter, r *http.Request) {
-
+func (h *Handler) DeleteRoute(w http.ResponseWriter, r *http.Request) {
+	h.handleDelete(w, r, models.DeleteRoute)
 }

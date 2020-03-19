@@ -9,10 +9,3 @@ func (app *application) logRequest(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r)
 	})
 }
-
-func (app *application) loginRequired(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// TODO: Make sure the user is logged in.
-		next.ServeHTTP(w, r)
-	})
-}

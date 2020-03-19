@@ -148,3 +148,130 @@ func GetRoute(db *sql.DB, id int) (string, error) {
 
 	return string(res), err
 }
+
+// PostRoute creates a new route into the database.
+func PostRoute(db *sql.DB, tokenMap map[string]struct{}, jsonBody []byte) (string, error) {
+	ra := routePostAPI{}
+	err := json.Unmarshal(jsonBody, &ra)
+	if err != nil {
+		return ErrorToJSON(err)
+	}
+
+	if _, ok := tokenMap[ra.APIToken]; !ok {
+		return ErrorToJSON(ErrTokenInvalid)
+	}
+
+	tx, err := db.Begin()
+	if err != nil {
+		return ErrorToJSON(err)
+	}
+	s := `INSERT INTO busRoute (routeName) VALUES ($1) RETURNING routeID`
+	stmt, err := tx.Prepare(s)
+	if err != nil {
+		return ErrorToJSON(err)
+	}
+	defer stmt.Close()
+
+	r := routePostRespAPI{}
+	err = stmt.QueryRow(ra.RouteName).Scan(&r.RouteID)
+	if err != nil {
+		tx.Rollback()
+		return ErrorToJSON(err)
+	}
+
+	for i, val := range ra.StationIDs {
+		ss := `INSERT INTO stationInRoute (stationID, routeID, orderInRoute) VALUES ($1, $2, $3)`
+		_, err := tx.Exec(ss, val, r.RouteID, i+1)
+		if err != nil {
+			tx.Rollback()
+			return ErrorToJSON(err)
+		}
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		return ErrorToJSON(err)
+	}
+
+	resp, err := json.Marshal(r)
+	if err != nil {
+		return ErrorToJSON(err)
+	}
+
+	return string(resp), nil
+}
+
+// PutRoute updates an existing route in the database with id.
+func PutRoute(db *sql.DB, tokenMap map[string]struct{}, id int, jsonBody []byte) (string, error) {
+	ra := routePostAPI{}
+	err := json.Unmarshal(jsonBody, &ra)
+	if err != nil {
+		return ErrorToJSON(err)
+	}
+
+	if _, ok := tokenMap[ra.APIToken]; !ok {
+		return ErrorToJSON(ErrTokenInvalid)
+	}
+
+	tx, err := db.Begin()
+	if err != nil {
+		return ErrorToJSON(err)
+	}
+
+	stmt := `UPDATE busRoute SET routeName = $1 WHERE routeID = $2`
+	_, err = tx.Exec(stmt, ra.RouteName, id)
+	if err != nil {
+		tx.Rollback()
+		return ErrorToJSON(err)
+	}
+
+	stmt = `DELETE FROM stationInRoute WHERE routeID = $1`
+	_, err = tx.Exec(stmt, id)
+	if err != nil {
+		tx.Rollback()
+		return ErrorToJSON(err)
+	}
+
+	for i, val := range ra.StationIDs {
+		ss := `INSERT INTO stationInRoute (stationID, routeID, orderInRoute) VALUES ($1, $2, $3)`
+		_, err := tx.Exec(ss, val, id, i+1)
+		if err != nil {
+			tx.Rollback()
+			return ErrorToJSON(err)
+		}
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		return ErrorToJSON(err)
+	}
+
+	return "", nil
+}
+
+// DeleteRoute deletes an existing route in the database with id.
+func DeleteRoute(db *sql.DB, tokenMap map[string]struct{}, id int, jsonBody []byte) (string, error) {
+	ta := tokenAPI{}
+	err := json.Unmarshal(jsonBody, &ta)
+	if err != nil {
+		return ErrorToJSON(err)
+	}
+
+	if _, ok := tokenMap[ta.APIToken]; !ok {
+		return ErrorToJSON(ErrTokenInvalid)
+	}
+
+	stmt := `DELETE FROM stationInRoute WHERE routeID = $1`
+	_, err = db.Exec(stmt, id)
+	if err != nil {
+		return ErrorToJSON(err)
+	}
+
+	stmt = `DELETE FROM busRoute WHERE routeID = $1`
+	_, err = db.Exec(stmt, id)
+	if err != nil {
+		return ErrorToJSON(err)
+	}
+
+	return "", nil
+}

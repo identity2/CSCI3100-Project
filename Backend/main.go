@@ -23,13 +23,9 @@ const (
 )
 
 type application struct {
-	infoLog      *log.Logger
-	errorLog     *log.Logger
-	bh           *handlers.BusHandler     // Bus handler
-	rh           *handlers.RouteHandler   // Route handler
-	sh           *handlers.StationHandler // Station handler
-	uh           *handlers.UserHandler    // User handler
-	validAPIKeys map[string]struct{}      // Set of valid API keys.
+	infoLog  *log.Logger
+	errorLog *log.Logger
+	handler  *handlers.Handler
 }
 
 func main() {
@@ -63,15 +59,13 @@ func main() {
 		}
 	}
 
+	validAPIKeys := make(map[string]struct{})
+
 	// The application structure.
 	app := &application{
-		infoLog:      infoLog,
-		errorLog:     errorLog,
-		bh:           &handlers.BusHandler{DB: db, InfoLog: infoLog, ErrorLog: errorLog},
-		rh:           &handlers.RouteHandler{DB: db, InfoLog: infoLog, ErrorLog: errorLog},
-		sh:           &handlers.StationHandler{DB: db, InfoLog: infoLog, ErrorLog: errorLog},
-		uh:           &handlers.UserHandler{DB: db, InfoLog: infoLog, ErrorLog: errorLog},
-		validAPIKeys: make(map[string]struct{}),
+		infoLog:  infoLog,
+		errorLog: errorLog,
+		handler:  &handlers.Handler{DB: db, InfoLog: infoLog, ErrorLog: errorLog, ValidAPIKeys: validAPIKeys},
 	}
 
 	// The web server.

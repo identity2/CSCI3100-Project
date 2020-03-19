@@ -1,26 +1,50 @@
 package handlers
 
 import (
-	"database/sql"
-	"log"
+	"fmt"
+	"io/ioutil"
 	"net/http"
-)
 
-// UserHandler handles all the authentication APIs.
-type UserHandler struct {
-	DB       *sql.DB
-	InfoLog  *log.Logger
-	ErrorLog *log.Logger
-}
+	"github.com/RitoGamingPLZ/CSCI3100/models"
+)
 
 // Register registers a user.
 // routed from: POST /register
-func (uh *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		h.ErrorLog.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 
+	resp, err := models.RegisterUser(h.DB, body)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprintf(w, resp)
+		return
+	}
+
+	// Success
+	w.WriteHeader(http.StatusCreated)
 }
 
 // Login logs in a user.
 // routed from: POST /login
-func (uh *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		h.ErrorLog.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 
+	resp, err := models.LoginUser(h.DB, h.ValidAPIKeys, body)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprintf(w, resp)
+		return
+	}
+
+	fmt.Fprintf(w, resp)
 }

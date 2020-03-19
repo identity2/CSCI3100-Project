@@ -18,6 +18,7 @@ Note that the database is not persistent between two start ups.
 First, install [Go](https://golang.org/doc/install). Then run the following command in **this directory** to start the backend system.
 
 ```
+go get
 go run .
 ```
 
@@ -60,7 +61,7 @@ The POST body should contain the following JSON format:
 
 ```
 {
-    "username": "The username (between 1 and 20 characters)",
+    "username": "The username (between 6 and 20 characters)",
     "isAdmin": 1 or 0,
     "password": "The password of the user (between 6 and 20 characters)",
     "email": "The email of the user"
@@ -294,15 +295,15 @@ If the DELETE request succeeded, `200 OK` will be returned.
 If the `apiToken` is invalid, `401 Unauthorized` will be returned.
 
 ### Bus
-Bus represents the active buses driven on a bus route. Each bus can be uniquely identified by the **(route ID, bus ID)** pair.
+Bus represents the active buses driven on a bus route. Each bus can be uniquely identified by the bus id.
 
 | Method |     URL             | Description                                      | API Token Required |
 | ------ | ------------------- | ------------------------------------------------ | ------------------ |
-| GET    | /bus/{routeID}      | Return the list of all buses in route {routeID}. | No                 |
-| GET    | /bus/{routeID}/{id} | Return the bus {id} in route {routeID}.          | No                 |
+| GET    | /bus                | Return the list of all buses.                    | No                 |
+| GET    | /bus/{id}           | Return the bus {id}.                             | No                 |
 | POST   | /bus                | Add a new bus.                                   | Yes                |
-| PUT    | /bus/{routeID}/{id} | Update the bus {id} in route {routeID}.          | Yes                |
-| DELETE | /bus/{routeID}/{id} | Delete the bus {id} in route {routeID}.          | Yes                |
+| PUT    | /bus/{id}           | Update the bus {id}.                             | Yes                |
+| DELETE | /bus/{id}           | Delete the bus {id}.                             | Yes                |
 
 #### GET `/bus/{routeID}`
 The full list of buses in the route with `{routeID}` will be returned in the following JSON format:
@@ -312,11 +313,13 @@ The full list of buses in the route with `{routeID}` will be returned in the fol
     "buses": [
         {
             "busID": 1,
+            "routeID": 1,
             "latitude": 25.12345,
             "longitude": 114.21311
         },
         {
             "busID": 2,
+            "routeID": 2,
             "latitude": 23.123123,
             "longitude": 114.12312321
         },
@@ -327,11 +330,12 @@ The full list of buses in the route with `{routeID}` will be returned in the fol
 
 * `buses` will be sorted by `busID`.
 
-#### GET `/bus/{routeID}/{id}`
+#### GET `/bus/{id}`
 The bus with `{id}` in route with `{routeID}` will be returned in the following JSON format:
 
 ```
 {
+    "routeID": 2,
     "latitude": 25.12345,
     "longitude": 114.1231
 }
@@ -359,7 +363,7 @@ If the POST request succeeded, `201 Created` will be returned with a response bo
 }
 ```
 
-* `busID` along with `routeID` is the unique ID for the newly created bus. (That is, every bus is uniquely identified by the tuple (`routeID`, `busID`).)
+* `busID` is the unique ID for the newly created bus.
 
 If the `apiToken` is invalid, `401 Unauthorized` will be returned.
 
@@ -371,12 +375,13 @@ If there are other errors, `400 Bad Request` will be returned with a body in the
 }
 ```
 
-#### PUT `/bus/{routeID}/{id}`
-The existing bus with `{id}` in the route with `{routeID}` will be updated. The PUT body should be in the following JSON format:
+#### PUT `/bus/{id}`
+The existing bus with `{id}` will be updated. The PUT body should be in the following JSON format:
 
 ```
 {
     "apiToken": "The API token issued upon logging in.",
+    "routeID": 2,
     "latitude": 11.111,
     "longitude": 22.222
 }
@@ -393,8 +398,8 @@ If there are other errors, `400 Bad Request` will be returned with a body in the
 }
 ```
 
-#### DELETE `/bus/{routeID}/{id}`
-The existing bus with `{id}` in route with `{routeID}` will be deleted. The DELETE body should be in the following JSON format:
+#### DELETE `/bus/{id}`
+The existing bus with `{id}` will be deleted. The DELETE body should be in the following JSON format:
 
 ```
 {
@@ -475,16 +480,9 @@ A new station will be created. The POST body should be in the following JSON for
     "apiToken": "The API token issued upon logging in.",
     "stationName": "the name of the station",
     "latitude": 44.4444,
-    "longitude": 55.555,
-    "routeIDs": [
-        3,
-        6,
-        ...
-    ]
+    "longitude": 55.555
 }
 ```
-
-* `routeIDs` are the routes which stop at the station.
 
 If the POST request succeeded, `201 Created` will be returned with a response body in the following JSON format:
 
@@ -513,16 +511,9 @@ The existing station with `{id}` will be updated. The PUT body should be in the 
     "apiToken": "The API token issued upon logging in.",
     "stationName": "The name of the station",
     "latitude": 44.4444,
-    "longitude": 55.555,
-    "routeIDs": [
-        3,
-        6,
-        ...
-    ]
+    "longitude": 55.555
 }
 ```
-
-* `routeIDs` are the routes which stop at the station.
 
 If the PUT request succeeded, `200 OK` will be returned.
 
@@ -559,11 +550,11 @@ If the `apiToken` is invalid, `401 Unauthorized` will be returned.
 | POST   | /route              | Add a new route.                                 | Yes                |
 | PUT    | /route/{id}         | Update the information of the route {id}.        | Yes                |
 | DELETE | /route/{id}         | Delete the route {id}.                           | Yes                |
-| GET    | /bus/{routeID}      | Return the list of all buses in route {routeID}. | No                 |
-| GET    | /bus/{routeID}/{id} | Return the bus {id} in route {routeID}.          | No                 |
+| GET    | /bus                | Return the list of all buses.                    | No                 |
+| GET    | /bus/{id}           | Return the bus {id}.                             | No                 |
 | POST   | /bus                | Add a new bus.                                   | Yes                |
-| PUT    | /bus/{routeID}/{id} | Update the bus {id} in route {routeID}.          | Yes                |
-| DELETE | /bus/{routeID}/{id} | Delete the bus {id} in route {routeID}.          | Yes                |
+| PUT    | /bus/{id}           | Update the bus {id}.                             | Yes                |
+| DELETE | /bus/{id}           | Delete the bus {id}.                             | Yes                |
 | GET    | /station            | Return the list of all stations.                 | No                 |
 | GET    | /station/{id}       | Return the station {id}.                         | No                 |
 | POST   | /station            | Add a new station.                               | Yes                |

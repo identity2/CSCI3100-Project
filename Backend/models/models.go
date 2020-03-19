@@ -1,0 +1,18 @@
+package models
+
+import "database/sql"
+
+// GetAllMethod is the function signature for get all.
+type GetAllMethod func(*sql.DB) (string, error)
+
+// GetMethod is the function signature for get.
+type GetMethod func(*sql.DB, int) (string, error)
+
+// PostMethod is the function signature for post.
+type PostMethod func(*sql.DB, map[string]struct{}, []byte) (string, error)
+
+// PutMethod is the function signature for put.
+type PutMethod func(*sql.DB, map[string]struct{}, int, []byte) (string, error)
+
+// DeleteMethod is the function signature for delet.
+type DeleteMethod func(*sql.DB, map[string]struct{}, int, []byte) (string, error)

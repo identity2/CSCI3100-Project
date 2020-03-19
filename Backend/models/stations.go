@@ -14,7 +14,13 @@ type stationGetAPI struct {
 
 type stationPostAPI struct {
 	tokenAPI
-	stationGetAPI
+	StationName string  `json:"stationName"`
+	Latitude    float64 `json:"latitude"`
+	Longitude   float64 `json:"longitude"`
+}
+
+type stationPostRespAPI struct {
+	StationID int `json:"stationID"`
 }
 
 // GetAllStations return all the stations in JSON formatted string.
@@ -92,4 +98,79 @@ func GetStation(db *sql.DB, id int) (string, error) {
 
 	res, err := json.Marshal(sa)
 	return string(res), err
+}
+
+// PostStation creates a new station into the database.
+func PostStation(db *sql.DB, tokenMap map[string]struct{}, jsonBody []byte) (string, error) {
+	sa := stationPostAPI{}
+	err := json.Unmarshal(jsonBody, &sa)
+	if err != nil {
+		return ErrorToJSON(err)
+	}
+
+	if _, ok := tokenMap[sa.APIToken]; !ok {
+		return ErrorToJSON(ErrTokenInvalid)
+	}
+
+	s := `INSERT INTO station (stationName, latitude, longitude) VALUES ($1, $2, $3) RETURNING stationID`
+	stmt, err := db.Prepare(s)
+	if err != nil {
+		return ErrorToJSON(err)
+	}
+	defer stmt.Close()
+
+	r := stationPostRespAPI{}
+	err = stmt.QueryRow(sa.StationName, sa.Latitude, sa.Longitude).Scan(&r.StationID)
+	if err != nil {
+		return ErrorToJSON(err)
+	}
+
+	resp, err := json.Marshal(r)
+	if err != nil {
+		return ErrorToJSON(err)
+	}
+
+	return string(resp), nil
+}
+
+// PutStation updates an existing station with the station id.
+func PutStation(db *sql.DB, tokenMap map[string]struct{}, id int, jsonBody []byte) (string, error) {
+	sa := stationPostAPI{}
+	err := json.Unmarshal(jsonBody, &sa)
+	if err != nil {
+		return ErrorToJSON(err)
+	}
+
+	if _, ok := tokenMap[sa.APIToken]; !ok {
+		return ErrorToJSON(ErrTokenInvalid)
+	}
+
+	stmt := `UPDATE station SET stationName = $1, latitude = $2, longitude = $3 WHERE stationID = $4`
+	_, err = db.Exec(stmt, sa.StationName, sa.Latitude, sa.Longitude, id)
+	if err != nil {
+		return ErrorToJSON(err)
+	}
+
+	return "", nil
+}
+
+// DeleteStation deletes an existing station with the station id.
+func DeleteStation(db *sql.DB, tokenMap map[string]struct{}, id int, jsonBody []byte) (string, error) {
+	ta := tokenAPI{}
+	err := json.Unmarshal(jsonBody, &ta)
+	if err != nil {
+		return ErrorToJSON(err)
+	}
+
+	if _, ok := tokenMap[ta.APIToken]; !ok {
+		return ErrorToJSON(ErrTokenInvalid)
+	}
+
+	stmt := `DELETE FROM station WHERE stationID = $1`
+	_, err = db.Exec(stmt, id)
+	if err != nil {
+		return ErrorToJSON(err)
+	}
+
+	return "", nil
 }

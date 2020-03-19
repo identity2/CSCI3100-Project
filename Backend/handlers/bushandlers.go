@@ -1,78 +1,37 @@
 package handlers
 
 import (
-	"database/sql"
-	"fmt"
-	"log"
 	"net/http"
-	"strconv"
 
 	"github.com/RitoGamingPLZ/CSCI3100/models"
 )
 
-// BusHandler handles all bus APIs.
-type BusHandler struct {
-	DB       *sql.DB
-	InfoLog  *log.Logger
-	ErrorLog *log.Logger
-}
-
-// GetAllBus reponses with all the buses in {routeID}.
-// routed from: GET /bus/{routeID}
-func (bh *BusHandler) GetAllBus(w http.ResponseWriter, r *http.Request) {
-	routeID, err := strconv.Atoi(r.URL.Query().Get(":routeID"))
-	if err != nil {
-		http.NotFound(w, r)
-		return
-	}
-
-	body, err := models.GetAllBus(bh.DB, routeID)
-	if err != nil {
-		bh.ErrorLog.Println(err)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	fmt.Fprintf(w, body)
+// GetAllBus reponses with all the buses.
+// routed from: GET /bus
+func (h *Handler) GetAllBus(w http.ResponseWriter, r *http.Request) {
+	h.handleGetAll(w, r, models.GetAllBus)
 }
 
 // GetBus responses with the bus {id} in the route {route}.
-// routed from: GET /bus/{routeID}/{id}
-func (bh *BusHandler) GetBus(w http.ResponseWriter, r *http.Request) {
-	routeID, err := strconv.Atoi(r.URL.Query().Get(":routeID"))
-	if err != nil {
-		http.NotFound(w, r)
-		return
-	}
-
-	id, err := strconv.Atoi(r.URL.Query().Get(":id"))
-	if err != nil {
-		http.NotFound(w, r)
-		return
-	}
-
-	body, err := models.GetBus(bh.DB, routeID, id)
-	if err != nil {
-		bh.ErrorLog.Println(err)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	fmt.Fprintf(w, body)
+// routed from: GET /bus/{id}
+func (h *Handler) GetBus(w http.ResponseWriter, r *http.Request) {
+	h.handleGet(w, r, models.GetBus)
 }
 
 // CreateBus creates a new bus.
 // routed from: POST /bus
-func (bh *BusHandler) CreateBus(w http.ResponseWriter, r *http.Request) {
-
+func (h *Handler) CreateBus(w http.ResponseWriter, r *http.Request) {
+	h.handlePost(w, r, models.PostBus)
 }
 
-// UpdateBus updates the bus in {route} with {id}.
-// routed from: PUT /bus/{routeID}/{id}
-func (bh *BusHandler) UpdateBus(w http.ResponseWriter, r *http.Request) {
+// UpdateBus updates the bus with {id}.
+// routed from: PUT /bus/{id}
+func (h *Handler) UpdateBus(w http.ResponseWriter, r *http.Request) {
+	h.handlePut(w, r, models.PutBus)
 }
 
 // DeleteBus deletes the bus in {route} with {id}.
 // routed from: DELETE /bus/{routeID}/{id}
-func (bh *BusHandler) DeleteBus(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) DeleteBus(w http.ResponseWriter, r *http.Request) {
+	h.handleDelete(w, r, models.DeleteBus)
 }
