@@ -1,10 +1,13 @@
 # The backend API for the Bus Management System
 ## Configuring environment and starting the server
 ### Staring up the PostgreSQL server
-I use PostgreSQL as the backend database. It is recommended to run postgreSQL through docker container. First, [Install Docker](https://docs.docker.com/install/). Then run the following command to start the database with the configuration of this project.
+I use PostgreSQL as the backend database. Here is how you start it up.
+
+## macOS/Linux
+If you are on **macOS**, it is recommended to run postgreSQL through docker container. First, [Install Docker](https://docs.docker.com/install/). Then run the following command to start the database with the configuration of this project.
 
 ```
-docker run --rm --name pg-docker -e POSTGRES_PASSWORD=csci3100 -e POSTGRES_DB=busApp -d -p 5432:5432 postgres
+docker run --rm --name pg-docker -e POSTGRES_PASSWORD=csci3100 -e POSTGRES_DB=busapp -d -p 5432:5432 postgres
 ```
 
 To stop the docker container, run
@@ -12,7 +15,16 @@ To stop the docker container, run
 docker stop pg-docker
 ```
 
-Note that the database is not persistent between two start ups.
+Note that the database is not persistent between two start ups of the docker container.
+
+## Windows
+If you are on **Windows**, you might want to buy a Mac, lol. JK, [Install PostgreSQL](https://www.postgresqltutorial.com/install-postgresql/) first, make sure to set the password as `csci3100` and port to `5432` during the installation step. Then, open the `SQL Shell` and log in using the username `postgres` and password `csci3100`. Next, type in the following command to create the `busApp` database:
+
+```
+CREATE DATABASE busapp;
+```
+
+**Do not close the SQL Shell while running the backend.**
 
 ### Running the backend
 First, install [Go](https://golang.org/doc/install). Then run the following command in **this directory** to start the backend system.
@@ -30,7 +42,9 @@ go run . -nomock
 
 so that the mock database records won't be generated (thus causing the database conflict error).
 
-* I only tested this on macOS now, so tell me if anything is wrong on other operating systems.
+Open the browser, type `http://localhost:3100/ping`. If it shows `ok`, you're all set up to use this API!
+
+*I tested this on both Windows and macOS, it should all be fine. However, message me if anything is wrong.*
 
 ## How to use a RESTful web API?
 Read [This (in Chinese)](https://ithelp.ithome.com.tw/articles/10187243) first to know how to use RESTful APIs in React (Expo) if you haven't used one before.

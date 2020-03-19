@@ -18,7 +18,7 @@ const (
 	dbPort     = 5432
 	dbUser     = "postgres"
 	dbPassword = "csci3100"
-	dbName     = "busApp"
+	dbName     = "busapp"
 	serverPort = ":3100"
 )
 
