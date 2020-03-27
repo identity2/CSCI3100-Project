@@ -1,0 +1,45 @@
+#main-wrapper{
+    background: white;
+    width: 55em;
+    margin: 0 auto;
+    padding: 5px;
+}
+#text-align{
+    font-size: 2em;
+}
+.login-img{
+    width:40%;
+    text-align : center;
+}
+#form-format{
+    margin-left: 1em;
+}
+.input-box-container{
+    text-align: center;
+}
+#input-box{
+    width: 70%;
+    font-size: 15px;
+    padding: 5px;
+    display: inline-block;
+}
+.label-align{
+    margin-left: 8em;
+}
+#button-sign-in{
+    background-color: #27ae60;
+    padding: 1em;
+    color: white;
+    width: 70%;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+#button-sign-up{
+    margin-left: 5.5em;
+    padding: 1em;
+    width: 70%;
+    text-align: left;
+    font-size: 18px;
+    font-weight: bold;
+}
