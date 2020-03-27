@@ -3,22 +3,7 @@
 ### Staring up the PostgreSQL server
 I use PostgreSQL as the backend database. Here is how you start it up.
 
-## macOS/Linux
-If you are on **macOS**, it is recommended to run postgreSQL through docker container. First, [Install Docker](https://docs.docker.com/install/). Then run the following command to start the database with the configuration of this project.
-
-```
-docker run --rm --name pg-docker -e POSTGRES_PASSWORD=csci3100 -e POSTGRES_DB=busapp -d -p 5432:5432 postgres
-```
-
-To stop the docker container, run
-```
-docker stop pg-docker
-```
-
-Note that the database is not persistent between two start ups of the docker container.
-
-## Windows
-If you are on **Windows**, you might want to buy a Mac, lol. JK, [Install PostgreSQL](https://www.postgresqltutorial.com/install-postgresql/) first, make sure to set the password as `csci3100` and port to `5432` during the installation step. Then, open the `SQL Shell` and log in using the username `postgres` and password `csci3100`. Next, type in the following command to create the `busApp` database:
+First, [Install PostgreSQL](https://www.postgresqltutorial.com/install-postgresql/), make sure to set the password as `csci3100` and port to `5432` during the installation step. Then, open the `SQL Shell` and log in using the username `postgres` and password `csci3100`. Next, type in the following command to create the `busApp` database:
 
 ```
 CREATE DATABASE busapp;
@@ -47,7 +32,11 @@ Open the browser, type `http://localhost:3100/ping`. If it shows `ok`, you're al
 *I tested this on both Windows and macOS, it should all be fine. However, message me if anything is wrong.*
 
 ## How to use a RESTful web API?
-Read [This (in Chinese)](https://ithelp.ithome.com.tw/articles/10187243) first to know how to use RESTful APIs in React (Expo) if you haven't used one before.
+### for PHP
+[Read this](https://weichie.com/blog/curl-api-calls-with-php/)
+
+### for React Native (Expo)
+[Read This](https://ithelp.ithome.com.tw/articles/10187243)
 
 ## APIs in Details
 All APIs are passed in the form of JSON.
