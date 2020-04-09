@@ -349,7 +349,7 @@ A new bus will be created. The POST body should be in the following JSON format:
 
 ```
 {
-    "apiToken": "The API token issued upon loggin in.",
+    "apiToken": "The API token issued upon logging in.",
     "routeID": 1,
     "latitude": 0.12313,
     "longitude": 1.3213
