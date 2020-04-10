@@ -17,6 +17,7 @@ func (app *application) routes() http.Handler {
 	// Authentication
 	mux.Post("/register", http.HandlerFunc(app.handler.Register))
 	mux.Post("/login", http.HandlerFunc(app.handler.Login))
+	mux.Post("/logout", http.HandlerFunc(app.handler.Logout))
 
 	// Bus Route
 	mux.Get("/route", http.HandlerFunc(app.handler.GetAllRoute))
@@ -39,5 +40,7 @@ func (app *application) routes() http.Handler {
 	mux.Put("/station/:id", http.HandlerFunc(app.handler.UpdateStation))
 	mux.Del("/station/:id", http.HandlerFunc(app.handler.DeleteStation))
 
-	return app.logRequest(mux)
+	mux.Options("/:res/:id", http.HandlerFunc(handlers.Ping))
+
+	return allowCrossOrigin(app.logRequest(mux))
 }

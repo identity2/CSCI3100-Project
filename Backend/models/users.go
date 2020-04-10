@@ -179,3 +179,17 @@ func LoginUser(db *sql.DB, tokenMap map[string]struct{}, jsonBody []byte) (strin
 
 	return string(res), nil
 }
+
+// LogoutUser clears the apitoken of a user.
+func LogoutUser(tokenMap map[string]struct{}, jsonBody []byte) (string, error) {
+	ta := tokenAPI{}
+	err := json.Unmarshal(jsonBody, &ta)
+	if err != nil {
+		return ErrorToJSON(err)
+	}
+
+	if _, ok := tokenMap[ta.APIToken]; ok {
+		delete(tokenMap, ta.APIToken)
+	}
+	return "", nil
+}

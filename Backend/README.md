@@ -58,6 +58,7 @@ Used to test whether is server is up or not. If the server is up, it will reply 
 | ------ | ----------- | ---------------- | ------------------ |
 | POST   | /register   | Register a user. | No                 |
 | POST   | /login      | Login a user.    | No                 |
+| POST   | /logout     | Logout a user.   | Yes                |
 
 #### POST `/register`
 The POST body should contain the following JSON format:
@@ -102,6 +103,25 @@ If the POST request succeeded, `200 OK` will be returned with a response body in
 ```
 
 The api token is required for some of the APIs such as create, update, and delete. **Only the administrator-user will receive a valid API token.**
+
+If the POST request failed, `400 Bad Request` will be returned with the following JSON:
+
+```
+{
+    "error": "The reason of the failure."
+}
+```
+
+#### POST `logout`
+The POST body should contain the following JSON format:
+
+```
+{
+    "apiToken": "The apiToken for the user."
+}
+```
+
+If the POST request succeeded, `200 OK` will be returned with an empty body.
 
 If the POST request failed, `400 Bad Request` will be returned with the following JSON:
 
@@ -548,6 +568,7 @@ If the `apiToken` is invalid, `401 Unauthorized` will be returned.
 | GET    | /ping               | Check if the server is up.                       | No                 |
 | POST   | /register           | Register a user.                                 | No                 |
 | POST   | /login              | Login a user.                                    | No                 |
+| POST   | /logout             | Logout a user.                                   | Yes                |
 | GET    | /route              | Return the list of all routes.                   | No                 |
 | GET    | /route/{id}         | Return the route {id}.                           | No                 |
 | POST   | /route              | Add a new route.                                 | Yes                |

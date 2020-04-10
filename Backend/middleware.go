@@ -9,3 +9,13 @@ func (app *application) logRequest(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r)
 	})
 }
+
+func allowCrossOrigin(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Add("Access-Control-Allow-Origin", "*")
+		w.Header().Add("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+		w.Header().Add("Access-Control-Allow-Headers", "*")
+		w.Header().Add("Access=Control-Expose-Headers", "*")
+		next.ServeHTTP(w, r)
+	})
+}
