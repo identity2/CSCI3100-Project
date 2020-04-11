@@ -1,4 +1,7 @@
 # The backend API for the Bus Management System
+## Directly using the backend hosted online
+If you are lazy to configure and install stuff, I hosted the backend API on Google Compute Engine, so you can just type in `http://35.201.158.77:3100/` to access the API. Try `http://35.201.158.77:3100/ping` for API server connection.
+
 ## Configuring environment and starting the server
 ### Staring up the PostgreSQL server
 I use PostgreSQL as the backend database. Here is how you start it up.

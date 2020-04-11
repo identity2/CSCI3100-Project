@@ -7,5 +7,8 @@
 4. Open the browser (Google Chrome is suggested). Type `http://localhost:8080/`.
 5. You can see if the admin page successfully connects to the backend API by the *server status* badge.
 
+## Hosting
+The admin page is hosted on [Google Compute Engine](http://35.201.158.77/).
+
 ## Home Page
 ![Home Page](https://i.imgur.com/A859bwy.png)
