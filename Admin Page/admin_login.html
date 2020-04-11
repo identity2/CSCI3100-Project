@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SB Admin 2 - Dashboard</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <div class="sidebar-brand-icon rotate-n-15">
+                <i class="fas fa-laugh-wink"></i>
+            </div>
+            <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+        </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item active">
+            <a class="nav-link" href="index.html">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Home Page</span></a>
+        </li>
+
+        <!-- Divider -->
+
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            Main Functions
+        </div>
+
+        <!-- Nav Item - Route, Station, Bus -->
+        <li class="nav-item">
+            <a class="nav-link" href="route.html">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Route Management</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="station.html">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Station Management</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="bus.html">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Bus Management</span>
+            </a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div id="account" class="sidebar-heading">
+            Account
+        </div>
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li id="login-register" class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
+                <i class="fas fa-fw fa-folder"></i>
+                <span>Login / Register</span>
+            </a>
+            <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Functions:</h6>
+                    <a class="collapse-item" href="admin_login.html">Login</a>
+                    <a class="collapse-item" href="admin_register.html">Register</a>
+                    <div class="collapse-divider"></div>
+                </div>
+            </div>
+        </li>
+
+        <li id="logout" class="nav-item">
+            <a id="logout-btn" class="nav-link" href="#">
+                <i class="fas fa-fw"></i>
+                <span>Logout</span>
+            </a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block">
+
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="mt-3 text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+
+        <div class="mt-5 ml-3 mr-3 text-center">
+            <span id="server-badge" class="badge badge-primary" style="background-color: red;">Server Off</span>
+        </div>
+
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div id="login-jumbotron" class="jumbotron">
+            <center><h2 class="display-4">Log In</h2></center>
+            <center class="mt-5"><img src="img/bus.jpg" /></center>
+            <div class="mt-4 ml-5 mr-5 pl-5 pr-5">
+                <div id="error-alert" class="alert alert-danger mt-2 mb-3" role="alert" style="display:none;"></div>
+                <label for="username-input">Username:</label>
+                <div class="input-group mb-4">
+                    <input type="text" id="username-input" class="form-control" placeholder="Enter your username">
+                </div>
+
+                <label for="password-input">Password:</label>
+                <div class="input-group mb-4">
+                    <input type="password" id="password-input" class="form-control" placeholder="Enter your password">
+                </div>
+
+                <center><button id="login-btn" type="button" class="btn btn-primary">Log In</button></center>
+            </div>
+        </div>
+    </div>
+
+    <!-- End of Main Content -->
+
+</div>
+<!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Bootstrap core JavaScript-->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="js/sb-admin-2.min.js"></script>
+
+<script src="global.js"></script>
+
+<script>
+pingServer();
+checkLogin(function() {
+    alert('You already logged in!');
+    window.location.href = "index.html";
+});
+
+var loginBtn = document.getElementById('login-btn');
+
+loginBtn.onclick = function() {
+    var warningBox = document.getElementById('error-alert');
+    var usernameText = document.getElementById('username-input').value;
+    var passwordText = document.getElementById('password-input').value;
+
+    if (usernameText.length == 0) {
+        // Check username field empty.
+        warningBox.innerHTML = 'Please enter your username!';
+        warningBox.style.display = 'block';
+    } else if (passwordText.length == 0) {
+        // Check password field empty.
+        warningBox.innerHTML = 'Please enter your password!';
+        warningBox.style.display = 'block';
+    } else {
+        // Client side check completed.
+        loginBtn.innerHTML = 'Logging in...';
+        loginBtn.setAttribute('disabled', '');
+
+        var postBody = JSON.stringify({
+            username: usernameText,
+            password: passwordText
+        });
+    
+        // POST to the server.
+        $.post(serverAddr + '/login', postBody, function(data, status, xhr) {
+            // Set the cookies.
+            setCookie('api_token', JSON.parse(xhr.responseText)['apiToken']);
+            setCookie('username', usernameText);
+            
+            alert('Logged in as user: ' + usernameText + '!');
+            window.location.href = 'index.html';
+        }).fail(function(xhr, status, error) {
+            if (xhr.responseText != '') {
+                warningBox.innerHTML = 'Log in failed: ' + JSON.parse(xhr.responseText)['error'] + '.';
+                warningBox.style.display = 'block';
+            } else {
+                warningBox.innerHTML = 'Log in failed with unknown reason, please try again!';
+                warningBox.style.display = 'block';
+            }
+    
+            loginBtn.innerHTML = 'Log In';
+            loginBtn.removeAttribute('disabled');
+        });
+    }
+
+};
+</script>
+
+</body>
+
+</html>

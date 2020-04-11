@@ -10512,25 +10512,7 @@
 		"bScrollCollapse": false,
 	
 	
-		/**
-		 * Configure DataTables to use server-side processing. Note that the
-		 * `ajax` parameter must also be given in order to give DataTables a
-		 * source to obtain the required data for each draw.
-		 *  @type boolean
-		 *  @default false
-		 *
-		 *  @dtopt Features
-		 *  @dtopt Server-side
-		 *  @name DataTable.defaults.serverSide
-		 *
-		 *  @example
-		 *    $(document).ready( function () {
-		 *      $('#example').dataTable( {
-		 *        "serverSide": true,
-		 *        "ajax": "xhr.php"
-		 *      } );
-		 *    } );
-		 */
+		
 		"bServerSide": false,
 	
 	

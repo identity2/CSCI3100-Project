@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SB Admin 2 - Dashboard</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <div class="sidebar-brand-icon rotate-n-15">
+                <i class="fas fa-laugh-wink"></i>
+            </div>
+            <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+        </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item active">
+            <a class="nav-link" href="index.html">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Home Page</span></a>
+        </li>
+
+        <!-- Divider -->
+
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            Main Functions
+        </div>
+
+        <!-- Nav Item - Route, Station, Bus -->
+        <li class="nav-item">
+            <a class="nav-link" href="route.html">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Route Management</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="station.html">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Station Management</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="bus.html">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Bus Management</span>
+            </a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div id="account" class="sidebar-heading">
+            Account
+        </div>
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li id="login-register" class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
+                <i class="fas fa-fw fa-folder"></i>
+                <span>Login / Register</span>
+            </a>
+            <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Functions:</h6>
+                    <a class="collapse-item" href="admin_login.html">Login</a>
+                    <a class="collapse-item" href="admin_register.html">Register</a>
+                    <div class="collapse-divider"></div>
+                </div>
+            </div>
+        </li>
+
+        <li id="logout" class="nav-item">
+            <a id="logout-btn" class="nav-link" href="#">
+                <i class="fas fa-fw"></i>
+                <span>Logout</span>
+            </a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block">
+
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="mt-3 text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+
+        <div class="mt-5 ml-3 mr-3 text-center">
+            <span id="server-badge" class="badge badge-primary" style="background-color: red;">Server Off</span>
+        </div>
+
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Main Content -->
+    <div class="container mt-5">
+        <div class="jumbotron">
+            <h1 class="display-5 mb-5">Station Management</h1>
+            <div id="not-logged-in">
+                <p style="color:red;" >You need to login first!</p>
+            </div>
+            
+            <div id="logged-in" style='display: none;'>
+                <button class="btn btn-primary" onclick='addStationClicked()' data-toggle="modal" data-target="#addStationModal">Add Station</button>
+                <hr />
+
+                <div id="station-list" class="list-group mt-3">
+                    
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Edit/Save Station Modal -->
+        <div class="modal fade" id="addStationModal" tabindex="-1" role="dialog" aria-labelledby="addStationModal" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="modal-label">Add Station</h5>
+                </div>
+                <div class="modal-body">
+                    
+                    <div id="error-alert" class="alert alert-danger mt-2 mb-3" role="alert" style="display:none;"></div>
+                    
+                    <label for="station-name-input">Station Name:</label>
+                    <div class="input-group mb-3">
+                        <input type="text" id="station-name-input" class="form-control" placeholder="Enter station name" />
+                    </div>
+
+                    <label for="station-lat-input">Station Latitude:</label>
+                    <div class="input-group mb-3">
+                        <input type="number" id="station-lat-input" class="form-control" placeholder="Enter station latitude" />
+                    </div>
+
+                    <label for="station-long-input">Station Longitude:</label>
+                    <div class="input-group mb-3">
+                        <input type="number" id="station-long-input" class="form-control" placeholder="Enter station longitude" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                <button type="button" id="close-btn" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" id="save-btn" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+            </div>
+        </div>
+
+    </div>
+    
+    <!-- End of Main Content -->
+
+</div>
+<!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Bootstrap core JavaScript-->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="js/sb-admin-2.min.js"></script>
+
+<script src="global.js"></script>
+
+<script>
+pingServer();
+checkLogin(main);
+
+var stations;
+
+function main() {
+    document.getElementById('not-logged-in').style.display = 'none';
+    document.getElementById('logged-in').style.display = 'block';
+
+    getAllStations();
+}
+
+function getAllStations() {
+    $.get(serverAddr + '/station', function(data, status, xhr) {
+        stations = JSON.parse(xhr.responseText)['stations'];
+        renderAllStations();
+    }).fail(function() {
+        alert('There was an error connecting to the server. Please retry.');
+        window.location.href = 'index.html';
+    });
+}
+
+function renderAllStations() {
+    var stationList = document.getElementById('station-list');
+    stations.forEach(function(el) {
+        stationList.innerHTML += stationEntry(el.stationID, el.stationName, el.latitude, el.longitude, el.routeIDs);
+    });
+}
+
+function stationEntry(sID, sName, sLat, sLong, sRoutes) {
+    return `
+    <div class="list-group mt-3">
+        <div class="list-group-item flex-column align-items-start">
+            <div class="d-flex justify-content-between">
+                <h5>` + sName +`</h5>
+                <small>ID: ` + sID + `</small>
+            </div>
+            <div class="d-flex justify-content-between">
+                <p class="mb-1">
+                    Location: ( ` + sLat + `° , `+sLong+`' )
+                    <br />
+                    Routes: ` + sRoutes + `
+                </p>
+                <div class="mt-2">
+                    <button class="btn btn-primary" onclick="editStationClicked(` + sID + `, '` + sName + `' ,` + sLat + `,` + sLong + `)" data-toggle="modal" data-target="#addStationModal">Edit</button>
+                    <button class="btn btn-danger" onclick="deleteStationClicked(` + sID + `)">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    `;
+}
+
+// Page actions.
+var saveBtn = document.getElementById('save-btn');
+var warningBox = document.getElementById('error-alert');
+var stationInput = document.getElementById('station-name-input');
+var latitudeInput = document.getElementById('station-lat-input');
+var longitudeInput = document.getElementById('station-long-input');
+var modalLabel = document.getElementById('modal-label');
+var modalAction = 'add';
+var currStationID;
+
+function addStationClicked() {
+    modalAction = 'add';
+    modalLabel.innerHTML = 'Add Station';
+    resetModalFields();
+}
+
+function editStationClicked(id, name, latitude, longitude) {
+    modalAction = 'edit';
+    modalLabel.innerHTML = 'Edit Station ID: ' + id;
+    currStationID = id;
+    resetModalFields();
+
+    // Set the fields to be the current values.
+    stationInput.value = name;
+    latitudeInput.value = latitude;
+    longitudeInput.value = longitude;
+}
+
+function deleteStationClicked(id) {
+    if (confirm('Sure you want to delete?')) {
+        $.ajax({
+            url: serverAddr + '/station/' + id,
+            type: 'DELETE',
+            data: JSON.stringify({
+                apiToken: getCookie('api_token')
+            }),
+            success: function() {
+                alert('Station deleted!');
+                location.reload();
+            }
+        }).fail(function(xhr, status, error) {
+            alert('Failed to delete.');
+        });
+    }
+}
+
+function resetModalFields() {
+    warningBox.style.display = 'none';
+    stationInput.value = '';
+    latitudeInput.value = '';
+    longitudeInput.value = '';
+}
+
+// Add Station.
+saveBtn.onclick = function() {
+    var stationName = stationInput.value;
+    var latitude = latitudeInput.value;
+    var longitude = longitudeInput.value;
+
+    if (stationName.length == 0 || latitude.length == 0 || longitude.length == 0) {
+        warningBox.innerHTML = 'Error: One of the fields is empty.'
+        warningBox.style.display = 'block';
+    } else if (isNaN(latitude) || isNaN(longitude)) {
+        warningBox.innerHTML = 'Error: Latitude and Longitude must be numbers.'
+        warningBox.style.display = 'block';
+    } else {
+        // Client side check completed.
+        saveBtn.setAttribute('disabled', '');
+        saveBtn.innerHTML = 'Saving...';
+
+        if (modalAction === 'add') {
+            // Adding a new station.
+            var postBody = JSON.stringify({
+                apiToken: getCookie('api_token'),
+                stationName: stationName,
+                latitude: parseFloat(latitude),
+                longitude: parseFloat(longitude)
+            });
+    
+            // POST to the server.
+            $.post(serverAddr + '/station', postBody, function(data, status, xhr) {
+                alert('New station added!');
+                location.reload();
+            }).fail(function(xhr, status, error) {
+                warningBox.innerHTML = 'Error: ' + JSON.parse(xhr.responseText)['error'] + '.';
+                warningBox.style.display = 'block';
+    
+                saveBtn.innerHTML = 'Save';
+                saveBtn.removeAttribute('disabled');
+            });
+        } else {
+            // Editing an existing station.
+            var putBody = JSON.stringify({
+                apiToken: getCookie('api_token'),
+                stationName: stationName,
+                latitude: parseFloat(latitude),
+                longitude: parseFloat(longitude)
+            });
+
+            // PUT to the server.
+            $.ajax({
+                url: serverAddr + '/station/' + currStationID,
+                type: 'put',
+                data: putBody,
+                success: function() {
+                    alert('New information saved!');
+                    location.reload();
+                }
+            }).fail(function(xhr, status, error) {
+                if (xhr.responseText) {
+                    warningBox.innerHTML = 'Error: ' + JSON.parse(xhr.responseText)['error'] + '.';     
+                } else {
+                    warningBox.innerHTML = 'Unknown Error';
+                }
+                warningBox.style.display = 'block';
+
+                saveBtn.innerHTML = 'Save';
+                saveBtn.removeAttribute('disabled');
+            });
+        }
+    }
+
+    
+};
+
+
+
+</script>
+
+</body>
+
+</html>
