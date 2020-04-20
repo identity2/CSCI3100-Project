@@ -12,10 +12,10 @@ func (app *application) logRequest(next http.Handler) http.Handler {
 
 func allowCrossOrigin(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Access-Control-Allow-Origin", "*")
-		w.Header().Add("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-		w.Header().Add("Access-Control-Allow-Headers", "*")
-		w.Header().Add("Access=Control-Expose-Headers", "*")
+		w.Header().Add("access-control-allow-origin", "*")
+		w.Header().Add("access-control-allow-methods", "POST, GET, OPTIONS, PUT, DELETE")
+		w.Header().Add("access-control-allow-headers", "*")
+		w.Header().Add("access-control-expose-headers", "*")
 		next.ServeHTTP(w, r)
 	})
 }

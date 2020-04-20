@@ -27,7 +27,7 @@ func (h *Handler) handleGetAll(w http.ResponseWriter, r *http.Request, method mo
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("content-Type", "application/json")
 	fmt.Fprintf(w, body)
 }
 
@@ -44,7 +44,7 @@ func (h *Handler) handleGet(w http.ResponseWriter, r *http.Request, method model
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("content-Type", "application/json")
 	fmt.Fprintf(w, body)
 }
 
