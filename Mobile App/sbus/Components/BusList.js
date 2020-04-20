@@ -10,38 +10,62 @@ import {
   } from 'react-native';
 
 import { Entypo, AntDesign , MaterialIcons} from '@expo/vector-icons';
+import * as Location from 'expo-location';
+import * as Permissions from 'expo-permissions';
 
 
 import COLORS from '../Colors'
 
 //update and store in liteSQL (phone)
-const stationData = [
-    {
-        SID: 1,
-        CH: '天水圍',
-        EN: 'Tin Shui Wai Station',
-    },
-    {
-        SID: 2,
-        CH: '旺角',
-        EN: 'Mong Kok',
-    },
-    {
-        SID: 3,
-        CH: '沙田',
-        EN: 'Sha Tin',
-    },
-    {
-        SID: 4,
-        CH: '尖沙咀',
-        EN: 'Tsim Sha Tsui station',
-    }
-]
+function distance(loc1, loc2, unit) {
+	if ((loc1.latitude == loc2.latitude) && (loc1.longitude == loc2.longitude)) {
+		return 0;
+	}
+	else {
+		var radlat1 = Math.PI * loc1.latitude/180;
+		var radlat2 = Math.PI * loc2.latitude/180;
+		var theta = loc1.longitude-loc2.longitude;
+		var radtheta = Math.PI * theta/180;
+		var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+		if (dist > 1) {
+			dist = 1;
+		}
+		dist = Math.acos(dist);
+		dist = dist * 180/Math.PI;
+		dist = dist * 60 * 1.1515;
+		if (unit=="K") { dist = dist * 1.609344 }
+		if (unit=="N") { dist = dist * 0.8684 }
+		return dist;
+	}
+}
+
+function ISNULL(object){
+    return object == null;
+}
 
 export class BusList extends React.Component {
     constructor(props){
         super(props);
+        this.state = {
+            currentlocation: null
+        }
     }
+
+    componentDidMount(){
+        this._getLocationAsync();
+    }
+
+    _getLocationAsync = async () => {
+        let { status } = await Permissions.askAsync(Permissions.LOCATION);
+        if (status !== 'granted') {
+          this.setState({
+            errorMessage: 'Permission to access location was denied',
+          });
+        }
+    
+        let location = await Location.getCurrentPositionAsync({});
+        this.setState({currentlocation: location.coords});
+    };
 
     _separator = () => {
         return (
@@ -58,30 +82,68 @@ export class BusList extends React.Component {
     };
 
     _busItem = ({index, item}) => {
-        let stpt = item.routePath[0];
-        let endpt = item.routePath[item.routePath.length - 1];
-        let nearStation = stationData.find(stationData => stationData.SID == item.nearStation);
+        var min, nearpt, stpt, edpt, nextbus, busdistance, waitingtime;
+        if (item.stations != null){
+            stpt = item.stations[0]
+            edpt = item.stations[item.stations.length - 1]
+            if (item.stations[0].longitude != null && item.stations[0].latitude != null && this.state.currentlocation != null){
+                min = distance(item.stations[0], this.state.currentlocation, 'K');
+                nearpt = item.stations[0];
+                item.stations.forEach(element => {
+                    if (element.longitude != null && element.latitude != null){
+                        let temp = distance(element, this.state.currentlocation, 'K');
+                        if (min > temp){
+                            min = temp;
+                            nearpt = element;
+                        }
+                    }
+                });
+                min = Math.round(min);
+            }
+        }
+        if (item.buses != null){
+            nextbus = item.buses[0]
+            if (item.buses[0].longitude != null && item.buses[0].latitude != null && nearpt != null){
+                busdistance =  distance(item.buses[0], nearpt, 'K');
+                item.buses.forEach(element => {
+                    if (element.longitude != null && element.latitude != null){
+                        let temp = distance(element, nearpt, 'K');
+                        if (busdistance > temp){
+                            busdistance = temp;
+                            nextbus = element;
+                        }
+                    }
+                });
+                waitingtime = busdistance / 80 * 60;
+                waitingtime = Math.round(waitingtime);
+            }
+        }
         return (
             <View style = {[styles.itemContainer]}>
                 <TouchableOpacity activeOpacity= {0.6} onPress = {() => {this._detail(item)}} style = {[styles.infoContainer, {backgroundColor: index % 2 == 0 ? COLORS.grey : COLORS.deepgrey}]}>
                     <View style = {{flexDirection: 'column', marginLeft :5, flex: 1}}>
-                        <View style = {{flexDirection: 'row', alignItems: 'center'}}>
+                        <View style = {{flexDirection: 'row', alignItems: 'center', overflow: "hidden"}}>
                             <Text style = {styles.routeText}>
                                 {item.routeName}
                             </Text>
                             <View style = {{marginHorizontal:5}}/>
                             <Text style = {[styles.routeText, {fontSize: routeTextSize}]}>
-                                {stpt.busStopName}
+                                {stpt != null ? stpt.stationName : null}
                             </Text>
                             <Entypo name = "arrow-long-right" size = {24} color = {COLORS.tintcolor} style = {{marginHorizontal:5}}/>
                             <Text style = {[styles.routeText, {fontSize: routeTextSize}]}>
-                                {endpt.busStopName}
+                                {edpt != null ? edpt.stationName : null}
                             </Text>
                         </View>
                         <View style = {{flexDirection: 'row', alignItems: 'center'}}>
-                            <Text  style = {[styles.infoText, {fontSize: infoTextSize, flex: 1}]}>
-                                Nearby: {}
-                            </Text>
+                            <View style = {{flexDirection: 'column', flex: 1}}>
+                                <Text  style = {[styles.infoText, {fontSize: infoTextSize, flex: 1}]}>
+                                    Nearby: {nearpt != null ? nearpt.stationName : null} 
+                                </Text>
+                                <Text  style = {[styles.infoText, {fontSize: infoTextSize, flex: 1}]}>
+                                    Distance: {min != null ? min : null} Km
+                                </Text>
+                            </View>
                             {/*
                             <View style = {{flexDirection:'row', paddingHorizontal: 5, justifyContent: 'center'}}>
                                 <Foundation name="foot" size = {17} color = {infoTextColor}/>                 
@@ -93,7 +155,7 @@ export class BusList extends React.Component {
                             <View style = {{flexDirection:'row',alignItems : 'center', justifyContent: 'center', width: 60}}>
                                 <MaterialIcons name="attach-money" size = {20} color = {infoTextColor}/>                 
                                 <Text  style = {[styles.infoText, {fontSize: infoTextSize+ 3}]}>
-                                    {item.price}
+                                    {waitingtime * 1.5 + 3}
                                 </Text>
                             </View>
                         </View>
@@ -104,7 +166,7 @@ export class BusList extends React.Component {
                     <TouchableOpacity activeOpacity= {0.6} onPress= {() => {this._travel(item)}} style= {styles.buttonItem}>
                         <AntDesign name = "swapright" size={32} style = {{margin: -10, marginBottom: -10}} color = {COLORS.tintcolor}/>
                         <Text style = {[styles.routeText, {fontSize: routeTextSize + 3}]}>
-                            {item.waitingTime}
+                            {waitingtime}
                         </Text>
                         <Text style={styles.itemText}>
                             min

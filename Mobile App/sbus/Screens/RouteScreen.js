@@ -53,7 +53,7 @@ export class RouteScreen extends React.Component {
              <View style = {styles.container}>
                 <View style = {styles.tabContainer}>
                   <Text style = {styles.tabText}>
-                    車程
+                    Route
                   </Text>
                 </View>
                 <View style = {styles.listContainer}>
@@ -61,7 +61,7 @@ export class RouteScreen extends React.Component {
                     this.state.route != null 
                     ?
                     <RouteList
-                    data = {this.state.route.routePath}  
+                      data = {this.state.route}  
                     />
                     :
                     <ActivityIndicator size={80} color={COLORS.verydeepgrey} style = {{flex: 1}}/>

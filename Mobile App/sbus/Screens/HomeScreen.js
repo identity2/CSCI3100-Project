@@ -22,63 +22,29 @@ import { MaterialCommunityIcons} from '@expo/vector-icons';
 
 import COLORS from '../Colors'
 //update and store in liteSQL (phone)
-const busRouteData = [
-    {
-        routeID: 0,
-        routeName : '276A',
-        price: 6.1,
-        routePath : [
-            {
-                busStopID: 0,
-                busStopName: 'Tin Shui Wai', 
-                location: 
-                {
-                    lat: 0.0,
-                    long: 0.0
-                },
-                busRouteIDs: 
-                []
-            },
-            {
-                busStopID: 0,
-                busStopName: 'Tin Shui Wai', 
-                location: 
-                {
-                    lat: 0.0,
-                    long: 0.0
-                },
-                busRouteIDs: 
-                []
-            },
-            {
-                busStopID: 0,
-                busStopName: 'Tin Shui Wai', 
-                location: 
-                {
-                    lat: 0.0,
-                    long: 0.0
-                },
-                busRouteIDs: 
-                []
-            }
-        ],
-        schudule : [
-
-        ]
-    }
-]
-    
 
 const HEADER_MAX_HEIGHT = +20;
 const HEADER_MIN_HEIGHT = -60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
-
+const url = 'http://35.201.158.77:3100/route';
 export class HomeScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             scrollY: new Animated.Value(0),
+            routes: null,
         };
+    }
+
+    componentDidMount(){
+        fetch(url)
+        .then(response => response.json())
+        .then(responseJson =>{
+            this.setState({
+                routes : responseJson
+            })
+        })
+        .catch(error => console.log(error));
     }
 
     static navigationOptions = {
@@ -102,15 +68,19 @@ export class HomeScreen extends React.Component {
             </View>
             */
             }
-
-            <View style = {styles.listContainer}>
-                <BusList
-                navigation = {this.props.navigation} 
-                data = {busRouteData}  
-                onScroll={Animated.event(
-                [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}],
-                )}/>
-            </View>
+            {this.state.routes != null
+                ?
+                <View style = {styles.listContainer}>
+                    <BusList
+                    navigation = {this.props.navigation} 
+                    data = {this.state.routes.routes}  
+                    onScroll={Animated.event(
+                    [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}],
+                    )}/>
+                </View>
+                :
+                <View/>
+            }
 
             <Animated.View  
             style = {[
