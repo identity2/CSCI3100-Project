@@ -6,13 +6,17 @@ import {
     AsyncStorage,
     View,
     SafeAreaView,
-    StyleSheet
+    StyleSheet,
+    Alert
 } from 'react-native';
 
 import { TextInput } from 'react-native-paper';
 
 import COLORS from '../Colors'
+import String from '../String'
 
+
+const url = String.SERVER_LINK + 'login'
 export class SignInScreen extends React.Component {
     constructor(props) {
         super(props);
@@ -38,7 +42,7 @@ export class SignInScreen extends React.Component {
                     mode='outlined'
                     label="Username"
                     theme={{ colors: { primary: COLORS.selected }}}
-                    onChangeText={(username) => this.setState({ username })}
+                    onChangeText={(username) => this.setState({ username: username })}
                     style={styles.input}
                     />
                 </View>
@@ -48,7 +52,7 @@ export class SignInScreen extends React.Component {
                     mode='outlined'
                     label="Password"
                     theme={{ colors: { primary: COLORS.selected }}}
-                    onChangeText={(password) => this.setState({ password })}
+                    onChangeText={(password) => this.setState({ password: password })}
                     secureTextEntry={true}
                     style={styles.input}
                     />
@@ -65,13 +69,13 @@ export class SignInScreen extends React.Component {
                 </View>
 
                 <View style = {styles.rowContainer}>
-                    <TouchableOpacity onPress={this._signInAsync} style = {[styles.button, {backgroundColor: COLORS.facebook}]}>
+                    <TouchableOpacity onPress={this._forcesignin} style = {[styles.button, {backgroundColor: COLORS.facebook}]}>
                         <Text style={styles.buttontext}>Facebook</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={this._signInAsync} style = {[styles.button, {backgroundColor: COLORS.google}]}>
+                    <TouchableOpacity onPress={this._forcesignin} style = {[styles.button, {backgroundColor: COLORS.google}]}>
                         <Text style={styles.buttontext}>Google</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={this._signInAsync} style = {[styles.button, {backgroundColor: COLORS.guest}]}>
+                    <TouchableOpacity onPress={this._forcesignin} style = {[styles.button, {backgroundColor: COLORS.guest}]}>
                         <Text style={styles.buttontext}>Guest</Text>
                     </TouchableOpacity>
                 </View>
@@ -81,13 +85,104 @@ export class SignInScreen extends React.Component {
     }
 
     _signup = () => {
+        this.props.navigation.navigate('SignUp');
+    };
 
-    };
+    _emptyInput = () =>{
+        Alert.alert(
+            'Empty Information',
+            'Username and Password cannot be empty',
+            [
+              { text: 'OK', onPress: () => console.log('OK Pressed') },
+            ],
+            { cancelable: false }
+          );
+    }
+
+    _longUsername = () => {
+        Alert.alert(
+            'Wrong Username format',
+            'length of Username cannot be larger than 20',
+            [
+              { text: 'OK', onPress: () => {} },
+            ],
+            { cancelable: false }
+          );
+    }
+
+    _wrongPasswordFormat = () => {
+        Alert.alert(
+            'Wrong Password format',
+            'length of Password must be between 6 and 20',
+            [
+              { text: 'OK', onPress: () => {} },
+            ],
+            { cancelable: false }
+          );
+    }
+
+    _wronginfo = () => {
+        Alert.alert(
+            'Wrong Account or Password',
+            'Account information is not correct',
+            [
+              { text: 'OK', onPress: () => {} },
+            ],
+            { cancelable: false }
+          );
+    }
   
+
     _signInAsync = async () => {
-      await AsyncStorage.setItem('userToken', 'abc');
-      this.props.navigation.navigate('App');
+        if (this.state.username == '' || this.state.password == '')
+        {
+            this._emptyInput();
+            return;
+        }
+
+        if (this.state.username.length > 20)
+        {
+            this._longUsername();
+            return;
+        }
+
+        if (this.state.password.length < 6 || this.state.password.length > 20){
+            this._wrongPasswordFormat();
+            return;
+        }
+        var loginjson = {
+            "username": this.state.username,
+            "password": this.state.password
+        }
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(loginjson),})
+            .then(res => res.json())
+            .then(async response =>
+                { 
+                    if (response.error ==null){
+                        //sucess
+                        await AsyncStorage.setItem(String.USERINFO,  JSON.stringify(loginjson));
+                        this.props.navigation.navigate('App');
+                    }
+                    else{
+                        //fail
+                        this._wronginfo();
+                    }
+                }
+            )
+            .catch(error => console.error('Error:', error));
+
+        //await AsyncStorage.setItem('userToken', 'abc');
     };
+
+    _forcesignin = () => {
+        this.props.navigation.navigate('App');
+    }
 }
 
 const styles = StyleSheet.create({

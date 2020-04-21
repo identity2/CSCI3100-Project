@@ -15,7 +15,7 @@ import {
 
 import { BusList } from '../Components/BusList'
 import { SearchHeader } from '../Components/SearchHeader'
-
+import String from '../String'
 
 import { MaterialCommunityIcons} from '@expo/vector-icons';
 
@@ -26,7 +26,7 @@ import COLORS from '../Colors'
 const HEADER_MAX_HEIGHT = +20;
 const HEADER_MIN_HEIGHT = -60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
-const url = 'http://35.201.158.77:3100/route';
+const url = String.SERVER_LINK + 'route';
 export class HomeScreen extends React.Component {
     constructor(props) {
         super(props);
@@ -59,7 +59,7 @@ export class HomeScreen extends React.Component {
         });
       return (
         <SafeAreaView style = {{flex: 1, backgroundColor: COLORS.bgcolor}}>
-            <SearchHeader onSearch = {this._onSearch} onMenu = {this._onMenu}/>
+            <SearchHeader onSearch = {this._onSearch} onMenu = {this._signOutAsync}/>
             {
             /*
             <View style = {{flexDirection: 'row'}}>
@@ -104,7 +104,7 @@ export class HomeScreen extends React.Component {
     }
 
     _onMenu = () => {
-
+        
     }
   
     _detail = () => {

@@ -11,6 +11,8 @@ import Constants from '../String';
 
 const db = SQLite.openDatabase(Constants.database_name);
 
+const url = Constants.SERVER_LINK + 'login';
+
 export class AuthLoadingScreen extends React.Component {
   componentDidMount() {
     this._updateDatebase();
@@ -18,6 +20,7 @@ export class AuthLoadingScreen extends React.Component {
   }
 
   _updateDatebase = () => {
+    /*
     db.transaction(tx => {
       tx.executeSql(
         'CREATE TABLE IF NOT EXISTS BUSCATEGORY(' +
@@ -40,14 +43,37 @@ export class AuthLoadingScreen extends React.Component {
         'PRIMARY KEY(sid));'
       );
     });
+    */
   }
 
   _bootstrapAsync = async () => {
     //Getting the user information
-    const userToken = await AsyncStorage.getItem('userToken');
-
+    const loginjson = await AsyncStorage.getItem(Constants.USERINFO);
+    if (loginjson != null){
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(loginjson),})
+        .then(res => res.json())
+        .then(async response =>
+            { 
+                if (response.error ==null){
+                    //sucess
+                    this.props.navigation.navigate('App');
+                }
+                else{
+                    //fail
+                    this.props.navigation.navigate('Auth');
+                }
+            }
+        )
+        .catch(error =>  this.props.navigation.navigate('Auth'));
+    }
+    this.props.navigation.navigate('Auth');
     //we can use the information to login and get the return
-    this.props.navigation.navigate(userToken ? 'App' : 'Auth');
+
   };
 
 

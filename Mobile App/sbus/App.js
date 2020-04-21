@@ -11,6 +11,7 @@ import { HomeScreen } from './Screens/HomeScreen'
 import { RouteScreen } from './Screens/RouteScreen'
 import { ScheduleScreen } from './Screens/ScheduleScreen'
 import { TravelScreen } from './Screens/TravelScreen'
+import { SignUpScreen } from './Screens/SignUpScreen'
 
 import COLORS from './Colors';
 import {Ionicons,  Entypo} from '@expo/vector-icons';
@@ -51,7 +52,8 @@ const AppStack = createStackNavigator(
 
 const AuthStack = createStackNavigator(
   { 
-    SignIn: SignInScreen 
+    SignIn: SignInScreen ,
+    SignUp: SignUpScreen
   }, 
   {
   });
