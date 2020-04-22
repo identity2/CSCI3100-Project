@@ -27,12 +27,15 @@ const HEADER_MAX_HEIGHT = +20;
 const HEADER_MIN_HEIGHT = -60;
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 const url = String.SERVER_LINK + 'route';
+const stationurl = String.SERVER_LINK + 'station';
 export class HomeScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             scrollY: new Animated.Value(0),
+            result: null,
             routes: null,
+            station: null,
         };
     }
 
@@ -41,10 +44,25 @@ export class HomeScreen extends React.Component {
         .then(response => response.json())
         .then(responseJson =>{
             this.setState({
-                routes : responseJson
+                routes : responseJson,
+                result : responseJson
             })
         })
         .catch(error => console.log(error));
+
+        fetch(stationurl)
+        .then(response => response.json())
+        .then(responseJson =>{
+            this.setState({
+                station : responseJson
+            })
+        })
+        .catch(error => console.log(error));
+    }
+
+    _reset = () => {
+        let json = this.state.routes;
+        this.setState({result: json});
     }
 
     static navigationOptions = {
@@ -59,7 +77,7 @@ export class HomeScreen extends React.Component {
         });
       return (
         <SafeAreaView style = {{flex: 1, backgroundColor: COLORS.bgcolor}}>
-            <SearchHeader onSearch = {this._onSearch} onMenu = {this._signOutAsync}/>
+            <SearchHeader onSearch = {this._onSearch} onMenu = {this._signOutAsync} onClear = {this._reset}/>
             {
             /*
             <View style = {{flexDirection: 'row'}}>
@@ -73,7 +91,7 @@ export class HomeScreen extends React.Component {
                 <View style = {styles.listContainer}>
                     <BusList
                     navigation = {this.props.navigation} 
-                    data = {this.state.routes.routes}  
+                    data = {this.state.result.routes}  
                     onScroll={Animated.event(
                     [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}],
                     )}/>
@@ -100,7 +118,35 @@ export class HomeScreen extends React.Component {
     }
 
     _onSearch = (searchKey) => {
-
+        let jsonresult = {
+            "routes" : []
+        };
+        this.state.routes.routes.forEach(element => {
+            if (element.routeName!= null &&
+                element.routeName.search(searchKey) != -1){
+                //if routeName is matched
+                if ( !( element in jsonresult.routes ) ) {
+                    //if element doesnt exist in array
+                    jsonresult.routes.push(element);
+                }
+            }
+        });
+        this.state.routes.routes.forEach(element =>{
+            if (element.stations != null){
+                element.stations.forEach(station =>{
+                    if (station.stationName != null &&
+                        station.stationName.search(searchKey) != -1){
+                            //if station name is match && not null
+                            if ( !( element in jsonresult.routes ) ) {
+                                //if element doesnt exist in array
+                                jsonresult.routes.push(element);
+                            }
+                        }
+                });
+            }
+        });
+        console.log(jsonresult)
+        this.setState({result: jsonresult});
     }
 
     _onMenu = () => {

@@ -26,14 +26,18 @@ export class SearchHeader extends React.Component {
         }
     }
 
+
     _onInput = (text) => {
+        this.setState({searchKey: text});
         if (text == ''){
+            if (this.props.onClear != null)
+                this.props.onClear();
             if (this.state.animation != 'fading'){
                 Animated.timing(this.state.opacity,{
                     toValue: 0,
                     duration: 300,
                 }).start();
-                this.setState({searchKey: '', animation: 'fading'});
+                this.setState({animation: 'fading'});
             }
         }
         else {
@@ -42,7 +46,7 @@ export class SearchHeader extends React.Component {
                     toValue: 1,
                     duration: 300,
                 }).start();
-                this.setState({searchKey: text, animation: 'entering'});
+                this.setState({animation: 'entering'});
             }          
         }
     }
@@ -56,9 +60,9 @@ export class SearchHeader extends React.Component {
                 style= {styles.textinputContainer}
                 placeholder = "Destination: location, station..."
                 placeholderTextColor = {COLORS.notselected}
-                onChangeText={this._onInput}
+                onChangeText={text => {this._onInput(text)}}
                 returnKeyType = "search"
-                onSubmitEditing = {() => {}}
+                onSubmitEditing = {this.props.onSearch != null ? () => {this.props.onSearch(this.state.searchKey)} : () => {}}
                 />
                 <Animated.View 
                 style = {{
@@ -75,7 +79,7 @@ export class SearchHeader extends React.Component {
                     style = {[styles.buttonContainer,{backgroundColor: COLORS.tintcolor}]} 
                     activeOpacity = {0.6}
                     disabled={this.state.searchKey == '' ?true: false}
-                    onPress={this.props.onSearch != null ? this.props.onSearch : () => {}}
+                    onPress={this.props.onSearch != null ? () => {this.props.onSearch(this.state.searchKey)} : () => {}}
                     >
                         <Text style = {{color: "#FFF"}}>
                             Search

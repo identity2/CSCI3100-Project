@@ -62,6 +62,7 @@ export class RouteScreen extends React.Component {
                     ?
                     <RouteList
                       data = {this.state.route}  
+                      navigation = {this.props.navigation}
                     />
                     :
                     <ActivityIndicator size={80} color={COLORS.verydeepgrey} style = {{flex: 1}}/>

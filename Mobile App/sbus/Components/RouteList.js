@@ -43,7 +43,7 @@ export class RouteList extends React.Component {
     }
 
     _travel = ()=>{
-
+        this.props.navigation.navigate('Travel');
     }
 
     _routeItem = ({index, item}) => {
@@ -79,11 +79,11 @@ export class RouteList extends React.Component {
             <View style= {styles.itemContainer}>
                 <View style = {styles.leftContainer}>
                     <View style = {styles.iconContainer}>
-                        <MaterialCommunityIcons name ="map-marker" size = {38} color = {COLORS.google}/>
+                        <MaterialCommunityIcons name ="map-marker" size = {30} color = {COLORS.google}/>
                     </View>
                     {<View style = {styles.verticalLine}/>}
                 </View>
-                <TouchableOpacity style = {[styles.rightContainer,styles.bottomLine]} onPress={() => {this._travel}}>
+                <TouchableOpacity style = {[styles.rightContainer,styles.bottomLine]} onPress={this._travel}>
                     <View style = {styles.contextContainer}>
                         <View style = {styles.busStopContainer}>
                             <Text style = {styles.busStopText}>
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
         padding: 5
     },
     busStopText:{
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: 'bold',
         color: COLORS.tintcolor,
     },
