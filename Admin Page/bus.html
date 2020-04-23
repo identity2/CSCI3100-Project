@@ -135,7 +135,8 @@
                 <button class="btn btn-primary" onclick='addBusClicked()' data-toggle="modal" data-target="#addBusModal">Add Bus</button>
                 <hr />
 
-                <div id="bus-list" class="list-group mt-3">
+                <!-- Accordion Wrapper for bus-list -->
+                <div id="bus-list" class="accordion md-accordion" role="tablist" aria-multiselectable="true">
                     <!-- This will be generated dynamically -->
                 </div>
             </div>
@@ -245,30 +246,34 @@ function renderAllBuses() {
 
 function busEntry(bID, bLat, bLong, bRoute) {
     return `
-    <div class="list-group mt-3">
-        <div class="list-group-item flex-column align-items-start">
-            <div class="d-flex justify-content-between">
-                <h5>Bus ID: ` + bID +`</h5>
-            </div>
-            <div class="d-flex justify-content-between">
-                <div>
-                    <p class="mb-2">
-                        On Route:
-                    </p>
-                    
-                    <li class="list-group mb-3">
-                        <ul class="list-group-item">
-                            ` + routes[bRoute] + `
-                        </ul>
-                    </li>
+    <div class="card">
+        <div class="card-header" role="tab" id="cardHeading`+ bID +`">
+            <a class="collapsed" data-toggle="collapse" data-parent="#bus-list" href="#collapse`+ bID +`" aria-expanded="true" aria-controls="collapse`+ bID +`">
+                <h4>BusID: `+ bID +`</h4>
+            </a>
+        </div>
+        <div id="collapse`+ bID +`" class="collapse show" role="tabpanel" aria-labelledby="cardHeading`+ bID+`" data-parent="#bus-list">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p class="mb-2">
+                            On Route:
+                        </p>
+                        
+                        <li class="list-group mb-3">
+                            <ul class="list-group-item">
+                                ` + routes[bRoute] + `
+                            </ul>
+                        </li>
 
-                    <p class="mb-2">
-                        Current Location: ( ` + bLat + `° , ` + bLong + `' )
-                    </p>
-                </div>
-                <div class="mt-2">
-                    <button class="btn btn-primary" onclick="editBusClicked(` + bID + `, ` + bRoute + `)" data-toggle="modal" data-target="#addBusModal">Edit</button>
-                    <button class="btn btn-danger" onclick="deleteBusClicked(` + bID + `)">Delete</button>
+                        <p class="mb-2">
+                            Current Location: ( ` + bLat + `° , ` + bLong + `' )
+                        </p>
+                    </div>
+                    <div class="mt-2">
+                        <button class="btn btn-primary" onclick="editBusClicked(` + bID + `, ` + bRoute + `)" data-toggle="modal" data-target="#addBusModal">Edit</button>
+                        <button class="btn btn-danger" onclick="deleteBusClicked(` + bID + `)">Delete</button>
+                    </div>
                 </div>
             </div>
         </div>
