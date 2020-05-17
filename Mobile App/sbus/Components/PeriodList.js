@@ -1,3 +1,11 @@
+/*
+  What: This is layout of timetable item
+  Who: CHIU LIN FUNG 1155109993
+  Where: schedule page
+  Why: easy to manage if separate the layout of list item
+  How: ...
+*/
+
 import React from 'react';
 import {
     TouchableOpacity,
