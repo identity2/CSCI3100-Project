@@ -1,3 +1,12 @@
+/*
+  What: the colors used in mobile app
+  Who: CHIU LIN FUNG 1155109993
+  Where: mobile application
+  Why: to unitize the color variable with better managament
+  How: call color name where it is needed
+*/
+
+
 const COLORS = {
     bgcolor: "#F8F8F8",
     notselected: "#bfbfbf",
