@@ -1,3 +1,9 @@
+/*
+Admin panel page plugin
+Contributor: Yu Chao
+
+Frontend system utility
+*/
 "use strict";
 
 // Load plugins
