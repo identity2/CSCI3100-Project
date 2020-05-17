@@ -1,3 +1,12 @@
+/*
+  What: This is the auth page of mobile app
+  Who: CHIU LIN FUNG 1155109993
+  Where: the automatical authorization part 
+  Why: to simipfy the process of login
+  How: once user lanuch app, this will be the first page to loaded with which authorizing account information from local storage
+*/
+
+
 import React from 'react';
 import {
   ActivityIndicator,
