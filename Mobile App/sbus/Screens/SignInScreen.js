@@ -1,3 +1,12 @@
+/*
+  What: This is sign in screen of mobile app
+  Who: CHIU LIN FUNG 1155109993
+  Where: sign in screen
+  Why: to construct the layout of sign in screen
+  How: ...
+*/
+
+
 import React from 'react';
 import {
     TouchableOpacity,
