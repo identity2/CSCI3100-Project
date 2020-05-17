@@ -1,6 +1,11 @@
 // Package handlers manages all the handlers of the routes.
 package handlers
 
+// This file handles all the requests related to server status.
+
+// Author: 1155053722 Chao Yu
+// Version 1: written 4/4/2020
+
 import (
 	"fmt"
 	"net/http"

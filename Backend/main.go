@@ -1,5 +1,12 @@
 package main
 
+// This file is the entry point of the backend application.
+// It sets up the database connection, HTTP server, and the application itself.
+// It also contains some configuration constants used by the application.
+
+// Author: 1155053722 Chao Yu
+// Version 1: written 4/4/2020
+
 import (
 	"database/sql"
 	"flag"

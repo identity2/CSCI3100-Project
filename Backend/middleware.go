@@ -1,5 +1,11 @@
 package main
 
+// This file contains some middleware
+// to modify the HTTP response.
+
+// Author: 1155053722 Chao Yu
+// Version 1: written 4/4/2020
+
 import "net/http"
 
 func (app *application) logRequest(next http.Handler) http.Handler {

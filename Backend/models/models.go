@@ -1,5 +1,11 @@
 package models
 
+// This file defines the protocols of the
+// functions for HTTP request methods.
+
+// Author: 1155053722 Chao Yu
+// Version 1: written 4/4/2020
+
 import "database/sql"
 
 // GetAllMethod is the function signature for get all.

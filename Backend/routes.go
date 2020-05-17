@@ -1,5 +1,11 @@
 package main
 
+// This file specifies which route should the
+// request go according to the URL requested.
+
+// Author: 1155053722 Chao Yu
+// Version 1: written 4/4/2020
+
 import (
 	"net/http"
 

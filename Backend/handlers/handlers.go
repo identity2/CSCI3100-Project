@@ -1,5 +1,11 @@
 package handlers
 
+// This file provides a generic procedure of
+// how each HTTP methods are handled.
+
+// Author: 1155053722 Chao Yu
+// Version 1: written 4/4/2020
+
 import (
 	"database/sql"
 	"errors"

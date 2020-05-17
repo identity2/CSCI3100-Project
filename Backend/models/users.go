@@ -1,5 +1,12 @@
 package models
 
+// This file serves as the abstraction layer
+// between the JSON response and PostgreSQL
+// for users.
+
+// Author: 1155053722 Chao Yu
+// Version 1: written 4/4/2020
+
 import (
 	"database/sql"
 	"encoding/json"
