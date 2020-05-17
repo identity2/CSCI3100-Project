@@ -1,3 +1,12 @@
+/*
+  What: the schedule of bus route
+  Who: CHIU LIN FUNG 1155109993
+  Where: schedule screen
+  Why: to display the schedule of bus route in a better look
+  How: the schedule require the json date structure of {["title", "timetable"]...}. title is name of section and timetable is the period and waiting time in that section
+*/
+
+
 import React from 'react';
 import {
   Button,
