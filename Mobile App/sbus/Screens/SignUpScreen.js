@@ -1,3 +1,12 @@
+/*
+  What: This is the sign up page of mobile app
+  Who: CHIU LIN FUNG 1155109993
+  Where: sign up screen
+  Why: to construct the sign up layout of mobile app
+  How: ...
+*/
+
+
 import React from 'react';
 import {
     TouchableOpacity,
