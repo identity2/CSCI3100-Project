@@ -1,3 +1,11 @@
+/*
+    what: the layout of searchHeader
+    who: CHIU LIN FUNG 1155109993
+    where: home page
+    why: easy for managament
+    how: take user input as searchKey, when search button is pressed, call onSearch function from outside with searchKey as input
+*/
+
 import React from 'react';
 import {
     TouchableOpacity,
