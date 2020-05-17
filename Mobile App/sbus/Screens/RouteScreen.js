@@ -1,3 +1,12 @@
+/*
+  What: This is the route page of mobile app
+  Who: CHIU LIN FUNG 1155109993
+  Where: mobile application
+  Why: to indicate the route information of bus route
+  How: using Flatlist to display the array of bus route stations and calculate the waiting time of buses
+*/
+
+
 import React from 'react';
 import {
   Button,
