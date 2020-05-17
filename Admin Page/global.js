@@ -1,3 +1,9 @@
+/*
+Webpage Unility library
+Contributor: Yu Chao
+
+Contain general methods to check user login status and deal with cookie setting
+*/
 var serverAddr = 'http://35.201.158.77:3100';
 
 function getCookie(cname) {
