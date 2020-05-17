@@ -1,3 +1,12 @@
+/*
+  What: This is the homepage of mobile app
+  Who: CHIU LIN FUNG 1155109993
+  Where: homepage of mobile app
+  Why: layout is needed for user-friendly design
+  How: built with Safeview, SearchHeader, Busroute and Animated navigation button
+*/
+
+
 import React from 'react';
 import {
   AsyncStorage,
