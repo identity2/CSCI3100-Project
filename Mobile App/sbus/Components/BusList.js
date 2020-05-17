@@ -1,3 +1,11 @@
+/*
+  What: the layout of Busroute item
+  Who: CHIU LIN FUNG 1155109993
+  Where: Busroute list at home page
+  Why: separate the layout of item could be easy to manage
+  How: ...
+*/
+
 import React from 'react';
 import {
     TouchableOpacity,
@@ -16,7 +24,14 @@ import * as Permissions from 'expo-permissions';
 
 import COLORS from '../Colors'
 
-//update and store in liteSQL (phone)
+/*
+  What: This is algorithmn to calculate the distance between two locations
+  Who: CHIU LIN FUNG 1155109993
+  Where: nearby station
+  Why: calculating and distance of nearby station
+  How: take 2 Geodata and a unit of 'M', 'K' as input and return distance in corresponding unit 
+*/
+
 function distance(loc1, loc2, unit) {
 	if ((loc1.latitude == loc2.latitude) && (loc1.longitude == loc2.longitude)) {
 		return 0;
