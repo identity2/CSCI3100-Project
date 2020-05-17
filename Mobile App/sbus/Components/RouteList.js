@@ -1,3 +1,11 @@
+/*
+  What: This is the layour of RouteList item
+  Who: CHIU LIN FUNG 1155109993
+  Where: Route Screen
+  Why: easy to manange if separate component out of screen
+  How: ...
+*/
+
 import React from 'react';
 import {
     TouchableOpacity,
